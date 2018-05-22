@@ -6,7 +6,7 @@ import (
 )
 
 // Ensure MovieService implement movie.service.
-var _ movie.Service = &MovieService{}
+var _ movie.Store = &MovieStorage{}
 
 const (
 	movieDB   = "/moviedb"
@@ -27,24 +27,24 @@ type document struct {
 }
 
 // MovieService represents a service managing movies in couchDB.
-type MovieService struct {
+type MovieStorage struct {
 	couch *couchdb.Database
 }
 
 // New creates a instance of movie service
-func New(u string) *MovieService {
+func New(u string) *MovieStorage {
 	database, err := couchdb.NewDatabase(u + movieDB)
 	if err != nil {
 		// handle error
 	}
 
-	return &MovieService{
+	return &MovieStorage{
 		couch: database,
 	}
 }
 
 // GetAll returns all movies.
-func (ms *MovieService) GetAll() []movie.Movie {
+func (ms *MovieStorage) GetAll() []movie.Movie {
 	docsQuery, err := ms.couch.QueryJSON(all)
 	if err != nil {
 		return []movie.Movie{}
@@ -70,7 +70,7 @@ func (ms *MovieService) GetAll() []movie.Movie {
 }
 
 // Get return a movie by its ID.
-func (ms *MovieService) Get(ID movie.MovieID) (*movie.Movie, error) {
+func (ms *MovieStorage) Get(ID movie.MovieID) (*movie.Movie, error) {
 	doc, err := ms.couch.Get(string(ID), nil)
 	if err != nil {
 		return nil, err
@@ -90,7 +90,7 @@ func (ms *MovieService) Get(ID movie.MovieID) (*movie.Movie, error) {
 
 // Create creates a new Movie.
 // This will return movie structure with new ID.
-func (ms *MovieService) Create(m *movie.Movie) error {
+func (ms *MovieStorage) Create(m *movie.Movie) error {
 	if m == nil {
 		return movie.ErrMovieNotFound
 	}
@@ -115,7 +115,7 @@ func (ms *MovieService) Create(m *movie.Movie) error {
 }
 
 // Update updates a movie.
-func (ms *MovieService) Update(m *movie.Movie) error {
+func (ms *MovieStorage) Update(m *movie.Movie) error {
 	if m.ID == "" {
 		return movie.ErrMovieIDRequired
 	}
@@ -135,7 +135,7 @@ func (ms *MovieService) Update(m *movie.Movie) error {
 	return nil
 }
 
-func (ms *MovieService) getRevision(ID string) string {
+func (ms *MovieStorage) getRevision(ID string) string {
 	doc, err := ms.couch.Get(ID, nil)
 	if err != nil {
 		return ""
@@ -150,7 +150,7 @@ func (ms *MovieService) getRevision(ID string) string {
 }
 
 // Delete deletes a movie by its ID.
-func (ms *MovieService) Delete(ID movie.MovieID) error {
+func (ms *MovieStorage) Delete(ID movie.MovieID) error {
 
 	if ID == "" {
 		return movie.ErrMovieIDRequired

@@ -10,8 +10,8 @@ type Movie struct {
 	Year        int64   `json:"year"`
 }
 
-// Service represents a service for managing movies.
-type Service interface {
+// Store represents a store for managing movies.
+type Store interface {
 	GetAll() []Movie
 	Get(MovieID) (*Movie, error)
 	Create(*Movie) error

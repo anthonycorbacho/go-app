@@ -7,14 +7,14 @@ import (
 )
 
 // GetAllMovies returns all movies or empty.
-func GetAllMovies(ms movie.Service) echo.HandlerFunc {
+func GetAllMovies(ms movie.Store) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return c.JSON(http.StatusOK, ms.GetAll())
 	}
 }
 
 // GetMovie returns a movie by its ID.
-func GetMovie(ms movie.Service) echo.HandlerFunc {
+func GetMovie(ms movie.Store) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ID := c.Param("id")
 
@@ -27,7 +27,7 @@ func GetMovie(ms movie.Service) echo.HandlerFunc {
 }
 
 // CreateMovie create a movie.
-func CreateMovie(ms movie.Service) echo.HandlerFunc {
+func CreateMovie(ms movie.Store) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		m := new(movie.Movie)
 		if err := c.Bind(m); err != nil {
@@ -43,7 +43,7 @@ func CreateMovie(ms movie.Service) echo.HandlerFunc {
 }
 
 // UpdateMovie update a movie.
-func UpdateMovie(ms movie.Service) echo.HandlerFunc {
+func UpdateMovie(ms movie.Store) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		m := new(movie.Movie)
 		if err := c.Bind(m); err != nil {
@@ -59,7 +59,7 @@ func UpdateMovie(ms movie.Service) echo.HandlerFunc {
 }
 
 // DeleteMovie create a flag.
-func DeleteMovie(ms movie.Service) echo.HandlerFunc {
+func DeleteMovie(ms movie.Store) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ID := c.Param("id")
 
