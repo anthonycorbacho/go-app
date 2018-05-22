@@ -9,7 +9,7 @@ import (
 var _ movie.Service = &MovieService{}
 
 const (
-	movieDB   = "/featureflags"
+	movieDB   = "/moviedb"
 	movieType = "movie_type"
 	all       = `
       {
@@ -163,7 +163,7 @@ func (ms *MovieService) Delete(ID movie.MovieID) error {
 	return nil
 }
 
-// toFlag converts a document to a movie.
+// toMovie converts a document to a movie.
 func toMovie(m *movie.Movie, d *document) {
 	m.ID = movie.MovieID(d.ID)
 	m.Description = d.Description
