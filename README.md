@@ -6,4 +6,5 @@ TODO:
  - Use go mod.
  - Refactor pkg
  - Add description
+ - Add tests
  
